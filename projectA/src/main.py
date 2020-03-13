@@ -1,5 +1,5 @@
 def hello(name):
-    return "helo, " + name
+    return "hello, " + name
 
 if __name__ == "__main__":
     import sys

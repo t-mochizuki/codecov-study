@@ -1,4 +1,4 @@
 from main import hello
 
 def test_hello():
-    assert hello("taka") == "helo, taka"
+    assert hello("taka") == "hello, taka"
