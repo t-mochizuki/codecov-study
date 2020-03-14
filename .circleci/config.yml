@@ -1,0 +1,40 @@
+version: 2.1
+
+jobs:
+  test-projectA:
+    docker:
+      - image: circleci/python:3.7.5
+    working_directory: ~/codecov-study
+    steps:
+      - checkout
+      - run:
+          name: Test projectA
+          command: |
+            cd ~/codecov-study/projectA
+            pip install pipenv
+            pipenv install --dev
+            pipenv run pytest --cov=./../ --cov-report=xml
+            cd ~/codecov-study
+            bash <(curl https://codecov.io/bash)
+
+  test-projectB:
+    docker:
+      - image: circleci/python:3.7.5
+    working_directory: ~/codecov-study
+    steps:
+      - checkout
+      - run:
+          name: Test projectB
+          command: |
+            cd ~/codecov-study/projectB
+            pip install pipenv
+            pipenv install --dev
+            pipenv run pytest --cov=./../ --cov-report=xml
+            cd ~/codecov-study
+            bash <(curl https://codecov.io/bash)
+
+workflows:
+  main:
+    jobs:
+      - test-projectA
+      - test-projectB
