@@ -7,6 +7,8 @@ jobs:
     working_directory: ~/codecov-study
     steps:
       - checkout
+      - restore_cache:
+          key: projectA-{{ .Branch }}-{{ checksum "~/codecov-study/projectA/Pipfile.lock" }}
       - run:
           name: Test projectA
           command: |
@@ -16,6 +18,10 @@ jobs:
             pipenv run pytest --cov=./../ --cov-report=xml
             cd ~/codecov-study
             bash <(curl https://codecov.io/bash)
+      - save_cache:
+          key: projectA-{{ .Branch }}-{{ checksum "~/codecov-study/projectA/Pipfile.lock" }}
+          paths:
+            - '~/.local/share/virtualenvs'
 
   test-projectB:
     docker:
@@ -23,6 +29,8 @@ jobs:
     working_directory: ~/codecov-study
     steps:
       - checkout
+      - restore_cache:
+          key: projectB-{{ .Branch }}-{{ checksum "~/codecov-study/projectB/Pipfile.lock" }}
       - run:
           name: Test projectB
           command: |
@@ -32,6 +40,10 @@ jobs:
             pipenv run pytest --cov=./../ --cov-report=xml
             cd ~/codecov-study
             bash <(curl https://codecov.io/bash)
+      - save_cache:
+          key: projectB-{{ .Branch }}-{{ checksum "~/codecov-study/projectB/Pipfile.lock" }}
+          paths:
+            - '~/.local/share/virtualenvs'
 
 workflows:
   main:
