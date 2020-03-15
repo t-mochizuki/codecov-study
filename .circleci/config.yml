@@ -10,18 +10,29 @@ jobs:
       - restore_cache:
           key: projectA-{{ .Branch }}-{{ checksum "~/codecov-study/projectA/Pipfile.lock" }}
       - run:
-          name: Test projectA
+          name: Install dev packages
           command: |
             cd ~/codecov-study/projectA
-            pip install pipenv
             pipenv install --dev
-            pipenv run pytest --cov=./../ --cov-report=xml
-            cd ~/codecov-study
-            bash <(curl https://codecov.io/bash)
       - save_cache:
           key: projectA-{{ .Branch }}-{{ checksum "~/codecov-study/projectA/Pipfile.lock" }}
           paths:
             - '~/.local/share/virtualenvs'
+      - run:
+          name: Run pycodestyle
+          command: |
+            cd ~/codecov-study/projectA
+            pipenv run pycodestyle .
+      - run:
+          name: Test projectA
+          command: |
+            cd ~/codecov-study/projectA
+            pipenv run pytest --cov=./../ --cov-report=xml
+      - run:
+          name: Upload the coverage report
+          command: |
+            cd ~/codecov-study
+            bash <(curl https://codecov.io/bash)
 
   test-projectB:
     docker:
@@ -32,18 +43,29 @@ jobs:
       - restore_cache:
           key: projectB-{{ .Branch }}-{{ checksum "~/codecov-study/projectB/Pipfile.lock" }}
       - run:
-          name: Test projectB
+          name: Install dev packages
           command: |
             cd ~/codecov-study/projectB
-            pip install pipenv
             pipenv install --dev
-            pipenv run pytest --cov=./../ --cov-report=xml
-            cd ~/codecov-study
-            bash <(curl https://codecov.io/bash)
       - save_cache:
           key: projectB-{{ .Branch }}-{{ checksum "~/codecov-study/projectB/Pipfile.lock" }}
           paths:
             - '~/.local/share/virtualenvs'
+      - run:
+          name: Run pycodestyle
+          command: |
+            cd ~/codecov-study/projectB
+            pipenv run pycodestyle .
+      - run:
+          name: Test projectB
+          command: |
+            cd ~/codecov-study/projectB
+            pipenv run pytest --cov=./../ --cov-report=xml
+      - run:
+          name: Upload the coverage report
+          command: |
+            cd ~/codecov-study
+            bash <(curl https://codecov.io/bash)
 
 workflows:
   main:
