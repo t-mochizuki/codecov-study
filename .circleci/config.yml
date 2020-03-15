@@ -2,6 +2,7 @@ version: 2.1
 
 jobs:
   test-projectA:
+    # https://github.com/CircleCI-Public/circleci-dockerfiles/blob/master/python/images/3.7.5/Dockerfile
     docker:
       - image: circleci/python:3.7.5
     working_directory: ~/codecov-study
